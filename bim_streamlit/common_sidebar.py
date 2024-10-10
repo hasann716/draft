@@ -28,7 +28,7 @@ def ChangeButtonColour(wgt_txt, wch_hex_colour = '12px'):
 def common_sidebar():
     with st.sidebar:
 #        model_name=list(models_dct.keys())[0] if "GPT_MODEL_NAME" not in st.session_state else st.session_state["GPT_MODEL_NAME"] 
-        page=st.sidebar.selectbox("Select a page", ["Related Posts", "Technical documentation"])
+        page=st.sidebar.selectbox("Select a page", ["Related Posts", "RAG"])
 
         # Display different content based on the selected page
         model_name = st.selectbox(
@@ -47,7 +47,7 @@ def common_sidebar():
 
         st.session_state["MODEL_API_KEY_TYPE"]=models_dct[model_name]
         st.session_state["GPT_MODEL_NAME"]=model_name
-        if page == "Technical documentation":
+        if page == "RAG":
             st.session_state["USER_SELECTION"]="DOCUMENTATION"
             technical_doc_sidebar()
         elif page == "Related Posts":

@@ -41,8 +41,7 @@ def technical_doc_sidebar():
         st.session_state["MIN_COST"]= st.number_input("cost greater than: ", min_value=0, step=10000)
         # Optionally visualize graph data using third-party libraries
 
-        sample_questions = ["what is the total price?", "what is the documenst about?", "what construction items are mentioned in the document?" , 
-                            "מה מחיר החפירות?", "מהו הרכיב היקר ביותר?", "באילו חומרים משתמשים?" , "היכן ממוקמים מדפי האש?", "מהן עבודות החשמל המוזכרות?","מהן עבודות האיטום המוזכרות?"]
+        sample_questions = ["what do people say in the context of west bank", "what do people say about beirut?"] 
 
         AddSampleQuestions(sample_questions)
 

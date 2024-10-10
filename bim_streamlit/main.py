@@ -58,7 +58,7 @@ if "messages" not in st.session_state:
     st.session_state.messages = [
         {
             "role": "ai",
-            "content": f"This is a Proof of Concept application which shows how GenAI can be used with Neo4j in order to query BIM IFC data in human language (this is work in progress)",
+            "content": f"This is a Proof of Concept application similiarities and rag)",
         }
     ]
 
@@ -81,7 +81,7 @@ if "sample" in st.session_state and st.session_state["sample"] is not None:
     user_input = st.session_state["sample"]
 else:
     user_input = st.chat_input(
-        placeholder="Ask question on the BIM project", key="user_input"
+        placeholder="Ask question ", key="user_input"
     )
 
 if user_input:

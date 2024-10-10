@@ -33,7 +33,8 @@ def format_docs(docs):
     return "\n\n".join(doc.page_content for doc in docs)
 
 
-template = """Answer the question based only on the following context:
+template = """ you assist with answering about posts that people shared on public platforms like facebook, twitter. 
+in the answer, provide reference to text you understood it from. Answer the question based only on the following context:
 {context}
 
 Question: {question}
@@ -75,14 +76,12 @@ class RagChainClass(ChainClass):
             from_existing_index(index_name=index_name,embedding=OpenAIEmbeddings(),text_key="text")
         top_k=int(st.session_state["K_TOP"]) if "K_TOP" in st.session_state else 15
         filter={}
-        if "SECTION" in st.session_state and st.session_state['SECTION'] !='All':
-            filter["section_name"]={'$eq': st.session_state["SECTION"]}
-        if "SUB_SECTION" in st.session_state and st.session_state['SUB_SECTION'] !='All':
-            filter["sub_section_name"]={'$eq': st.session_state["SUB_SECTION"]}
-        if "TASK" in st.session_state and st.session_state['TASK'] !='All':
-            filter["task_name"]={'$eq': st.session_state["TASK"]}
-        if "MIN_COST" in st.session_state:
-            filter["item_cost"]={'$gte': st.session_state["MIN_COST"]}
+        if "doc_type" in st.session_state and st.session_state['doc_type'] !='All':
+            filter["doc_type"]={'$eq': st.session_state["doc_type"]}
+        if "entity_type" in st.session_state and st.session_state['entity_type'] !='All':
+            filter["entity_type"]={'$eq': st.session_state["entity_type"]}
+        if "network" in st.session_state and (st.session_state['network']) !='All':
+            filter["network"]={'$eq': (st.session_state["network"])}
         self.rag_chain = RetrievalQA.from_chain_type(  
             llm=self.rag_llm,  
             chain_type="stuff",  
