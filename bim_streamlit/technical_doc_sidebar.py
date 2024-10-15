@@ -10,7 +10,7 @@ embeddings = OpenAIEmbeddings()
 
 pinecone_api_key = st.secrets['PINECONE_API_KEY']
 pc = Pinecone(api_key=pinecone_api_key)
-index_name = st.secrets['PINECONE_INDEX'] if 'PINECONE_INDEX' in st.secrets else  'posts-en-openai'
+index_name = st.secrets['PINECONE_INDEX']
 index = pc.Index(index_name)
 xq = embeddings.embed_query("all")
 res = index.query(vector=xq, top_k=300,include_metadata=True)
@@ -19,8 +19,8 @@ sub_section_name_set=set()
 task_name_set=set()
 for i in (res['matches']):
     section_name_set.add(i['metadata']['entity_type'])
-    sub_section_name_set.add(i['metadata']['network'])
-    task_name_set.add(i['metadata']['doc_type'])
+#    sub_section_name_set.add(i['metadata']['network'])
+#    task_name_set.add(i['metadata']['doc_type'])
 
 def technical_doc_sidebar():
     with st.sidebar: 
@@ -41,7 +41,9 @@ def technical_doc_sidebar():
         st.session_state["MIN_COST"]= st.number_input("cost greater than: ", min_value=0, step=10000)
         # Optionally visualize graph data using third-party libraries
 
-        sample_questions = ["what do people say in the context of west bank", "what do people say about beirut?"] 
+        sample_questions = ["summerize opinions toward arab leaders",
+                            "what is the sentiment toward hizballah? quote sentences",
+                            "what is the sentiment toward yihya sinwar? quote sentences "] 
 
         AddSampleQuestions(sample_questions)
 

@@ -8,7 +8,6 @@ from free_use_manager import (
 from langchain.globals import set_llm_cache
 from langchain_community.cache import InMemoryCache
 from streamlit_feedback import streamlit_feedback
-from constants import TITLE, TITLE1
 
 import logging
 #import rag_agent
@@ -29,20 +28,12 @@ if "SESSION_ID" not in st.session_state:
 # LangChain caching to reduce API calls
 set_llm_cache(InMemoryCache())
 
-# App title
-st.markdown(TITLE, unsafe_allow_html=True)
 
 image_path = "bim_streamlit/references/langchain.webp"
 # Create a two-column layout
 col1, col2 = st.columns([3, 1])
 
-with col1:
-    st.write("...............................................")  # Empty space in the first column to push content to the right
-#    st.write("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")  # Empty space in the first column to push content to the right
 
-with col2:
-    st.image(image_path, use_column_width=False, width=400)
-# Create a dropdown menu
 
 common_sidebar()
 

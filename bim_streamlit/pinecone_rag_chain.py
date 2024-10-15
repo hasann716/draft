@@ -58,37 +58,6 @@ from pinecone import Pinecone
 
 
 class RagChainClass(ChainClass):
-    def set_chain(self):
-        print("setting new postgres graph chain")
-        print(self.model_name, self.api_base, self.api_key)
-        self.graph_chain=None
-        if "gemini" in self.model_name:
-            self.rag_llm = ChatGoogleGenerativeAI(model=self.model_name, google_api_key=self.api_key,temperature=0, verbose=True)
-        else:
-            self.rag_llm = ChatOpenAI(model=self.model_name, openai_api_key=self.api_key,openai_api_base=self.api_base,temperature=0)
-        pinecone_api_key = st.secrets["PINECONE_API_KEY"]
-        index_name = 'posts-en-openai'
-        self.pc = Pinecone(api_key=pinecone_api_key)
-        self.index = self.pc.Index(index_name)
-#        print(self.index.describe_index_stats())
-
-        self.vectorstore = vpc.Pinecone(self.index,embedding=OpenAIEmbeddings(), text_key="text").\
-            from_existing_index(index_name=index_name,embedding=OpenAIEmbeddings(),text_key="text")
-        top_k=int(st.session_state["K_TOP"]) if "K_TOP" in st.session_state else 15
-        filter={}
-        if "doc_type" in st.session_state and st.session_state['doc_type'] !='All':
-            filter["doc_type"]={'$eq': st.session_state["doc_type"]}
-        if "entity_type" in st.session_state and st.session_state['entity_type'] !='All':
-            filter["entity_type"]={'$eq': st.session_state["entity_type"]}
-        if "network" in st.session_state and (st.session_state['network']) !='All':
-            filter["network"]={'$eq': (st.session_state["network"])}
-        self.rag_chain = RetrievalQA.from_chain_type(  
-            llm=self.rag_llm,  
-            chain_type="stuff",  
-            retriever=self.vectorstore.as_retriever(search_kwargs={"k": top_k, 'filter':filter } ) ,
-            memory=MEMORY
-        )  
-
     @retry(tries=1, delay=12)
     def get_results(self, question) -> str:
         """Generate response using Pinecone Vector using vector index only

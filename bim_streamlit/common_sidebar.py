@@ -4,9 +4,7 @@ import streamlit.components.v1 as components
 from langchain_community.graphs import Neo4jGraph
 from neo4j import GraphDatabase
 import json
-from sidebar import sidebar
 from technical_doc_sidebar import technical_doc_sidebar
-from technical_objects_sidebar import technical_objects_sidebar
 
 
 # Streamlit app layout
@@ -52,7 +50,6 @@ def common_sidebar():
             technical_doc_sidebar()
         elif page == "Related Posts":
             st.session_state["USER_SELECTION"]="RELATED_POSTS"
-            technical_objects_sidebar()
-
+            technical_doc_sidebar()
 
  
