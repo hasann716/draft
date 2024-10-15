@@ -2,41 +2,29 @@
 import streamlit as st
 import streamlit.components.v1 as components
 import json
-from pyvis.network import Network
-from common_functions import AddSampleQuestions
+from common_functions import AddSampleQuestions, get_meta_data_by_samples
 from pinecone import Pinecone
-from langchain_openai import OpenAIEmbeddings
-embeddings = OpenAIEmbeddings()
-
+import numpy as np
+random_vector = np.random.rand(1536)
 pinecone_api_key = st.secrets['PINECONE_API_KEY']
 pc = Pinecone(api_key=pinecone_api_key)
 index_name = st.secrets['PINECONE_INDEX']
 index = pc.Index(index_name)
-xq = embeddings.embed_query("all")
-res = index.query(vector=xq, top_k=300,include_metadata=True)
-entity_type_set=set()
-platform_type_set=set()
-post_type_set=set()
-for i in (res['matches']):
-    entity_type_set.add(i['metadata']['entity_type'])
-    platform_type_set.add(i['metadata']['platform_type'])
-    post_type_set.add(i['metadata']['post_type'])
+res = index.query(vector=list(random_vector), top_k=300,include_metadata=True)
+meta_dct_set, list_columns_set=get_meta_data_by_samples(res)
 
 def technical_doc_sidebar():
     with st.sidebar: 
     # Streamlit app layout
         st.title("Building Information Modeling")
-        entity_type=st.sidebar.selectbox("entity_type", ['All']+list(sorted(entity_type_set)))
-        platform_type=st.sidebar.selectbox("platform_type", ['All']+list(sorted(platform_type_set)))
-        post_type=st.sidebar.selectbox("post_type", ['All']+list(sorted(post_type_set)))
-        st.session_state["entity_type"]=entity_type
-        st.session_state["platform_type"]=platform_type
-        st.session_state["post_type"]=post_type
+        for c in meta_dct_set.keys():
+            st.session_state[c]=st.sidebar.selectbox(c, ['All']+list(sorted(meta_dct_set[c])))
+
         # Example query to fetch data
         with st.sidebar:
             st.session_state["K_TOP"]= st.radio(
                 "K top:",
-                ("3","5","10", "20","50", "100", "200"), index=2,horizontal=True
+                ("3","5","10", "20","50", "100", "200", "500"), index=2,horizontal=True
             )
         st.session_state["MIN_COST"]= st.number_input("cost greater than: ", min_value=0, step=10000)
         # Optionally visualize graph data using third-party libraries

@@ -10,6 +10,7 @@ from langchain_openai import OpenAIEmbeddings
 from langchain.chains import RetrievalQA
 from langchain.chains.conversation.memory import ConversationBufferMemory
 
+meta_str_filter_columns=["arena", "entity_type", "places_names", "post_type","platform_type","hashtags", "publisher_ethnicity", "publisher_gender", "entity_type", "organization_names"]
 MEMORY = ConversationBufferMemory(
     memory_key="chat_history", 
     input_key='query', 
@@ -81,3 +82,18 @@ class ChainClass:
             memory=MEMORY
         )  
 
+def get_meta_data_by_samples(res):
+    meta_dct_set={}
+    list_columns_set=set()
+    for i in (res['matches']):
+        for k in i['metadata']:
+            if k in (meta_str_filter_columns):
+                if k not in meta_dct_set.keys():
+                    meta_dct_set[k]=set()
+                if type(i['metadata'][k])!=list:
+                    meta_dct_set[k].add(i['metadata'][k].lower())
+                else:
+                    list_columns_set.add(k)
+                    for j in i['metadata'][k]:
+                        meta_dct_set[k].add(j.lower())
+    return(meta_dct_set, list_columns_set)
