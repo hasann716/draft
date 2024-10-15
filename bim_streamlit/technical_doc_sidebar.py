@@ -14,24 +14,24 @@ index_name = st.secrets['PINECONE_INDEX']
 index = pc.Index(index_name)
 xq = embeddings.embed_query("all")
 res = index.query(vector=xq, top_k=300,include_metadata=True)
-section_name_set=set()
-sub_section_name_set=set()
-task_name_set=set()
+entity_type_set=set()
+platform_type_set=set()
+post_type_set=set()
 for i in (res['matches']):
-    section_name_set.add(i['metadata']['entity_type'])
-#    sub_section_name_set.add(i['metadata']['network'])
-#    task_name_set.add(i['metadata']['doc_type'])
+    entity_type_set.add(i['metadata']['entity_type'])
+    platform_type_set.add(i['metadata']['platform_type'])
+    post_type_set.add(i['metadata']['post_type'])
 
 def technical_doc_sidebar():
     with st.sidebar: 
     # Streamlit app layout
         st.title("Building Information Modeling")
-        section_name=st.sidebar.selectbox("Section", ['All']+list(sorted(section_name_set)))
-        sub_section_name=st.sidebar.selectbox("Sub Section", ['All']+list(sorted(sub_section_name_set)))
-        task_name=st.sidebar.selectbox("Task", ['All']+list(sorted(task_name_set)))
-        st.session_state["SECTION"]=section_name
-        st.session_state["SUB_SECTION"]=sub_section_name
-        st.session_state["TASK"]=task_name
+        entity_type=st.sidebar.selectbox("entity_type", ['All']+list(sorted(entity_type_set)))
+        platform_type=st.sidebar.selectbox("platform_type", ['All']+list(sorted(platform_type_set)))
+        post_type=st.sidebar.selectbox("post_type", ['All']+list(sorted(post_type_set)))
+        st.session_state["entity_type"]=entity_type
+        st.session_state["platform_type"]=platform_type
+        st.session_state["post_type"]=post_type
         # Example query to fetch data
         with st.sidebar:
             st.session_state["K_TOP"]= st.radio(

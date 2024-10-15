@@ -68,12 +68,12 @@ class ChainClass:
             from_existing_index(index_name=self.index_name,embedding=OpenAIEmbeddings(),text_key="text")
         top_k=int(st.session_state["K_TOP"]) if "K_TOP" in st.session_state else 15
         filter={}
-        if "doc_type" in st.session_state and st.session_state['doc_type'] !='All':
-            filter["doc_type"]={'$eq': st.session_state["doc_type"]}
         if "entity_type" in st.session_state and st.session_state['entity_type'] !='All':
             filter["entity_type"]={'$eq': st.session_state["entity_type"]}
-        if "network" in st.session_state and (st.session_state['network']) !='All':
-            filter["network"]={'$eq': (st.session_state["network"])}
+        if "platform_type" in st.session_state and st.session_state['platform_type'] !='All':
+            filter["platform_type"]={'$eq': st.session_state["platform_type"]}
+        if "post_type" in st.session_state and (st.session_state['post_type']) !='All':
+            filter["post_type"]={'$eq': (st.session_state["post_type"])}
         self.rag_chain = RetrievalQA.from_chain_type(  
             llm=self.rag_llm,  
             chain_type="stuff",  
