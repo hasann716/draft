@@ -60,14 +60,6 @@ from pinecone import Pinecone
 class RagChainClass(ChainClass):
     @retry(tries=1, delay=12)
     def get_results(self, question) -> str:
-        """Generate response using Pinecone Vector using vector index only
-
-        Args:
-            question (str): User query
-
-        Returns:
-            str: Formatted string answer with citations, if available.
-        """
         logging.info(f"Question: {question}")
         embedding=OpenAIEmbeddings()
         query_vector = embedding.embed_query(question)
@@ -77,14 +69,26 @@ class RagChainClass(ChainClass):
         results = retriever.get_relevant_documents(question)
 
         # Print details of each match
-        for match in results:
-            print(match)
+#        for match in results:
+#            print(match)
 
         with get_openai_callback() as cb:
             embedding=OpenAIEmbeddings()
             chain_result = self.rag_chain.invoke(question, return_only_outputs=False, verbose=True)
-            print (cb)
         result = chain_result["result"]
+        return(result, cb)
+
+
+    @retry(tries=1, delay=12)
+    def get_top_k_documents(self, question) -> str:
+
+        logging.info(f"Question: {question}")
+
+        # Query the retriever directly
+        retriever = self.rag_chain.retriever
+        results = retriever.get_relevant_documents(question)
+        cb=None
+        result=results
         return(result, cb)
 
 

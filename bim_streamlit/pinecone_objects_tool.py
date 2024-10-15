@@ -1,5 +1,6 @@
 from langchain.tools import tool
-from pinecone_objects_chain import RagChainClass
+from pinecone_rag_chain import RagChainClass
+
 
 class PineconeObjectsTool:
     def __init__(self):
@@ -11,4 +12,4 @@ class PineconeObjectsTool:
         For finding similar entities to the ones in the search query.
         """
 #        print("Tool input is:" + tool_input)
-        return (self.cypher_chain.get_results(tool_input))
+        return (self.cypher_chain.get_top_k_documents(tool_input))

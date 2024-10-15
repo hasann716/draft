@@ -34,7 +34,6 @@ image_path = "bim_streamlit/references/langchain.webp"
 col1, col2 = st.columns([3, 1])
 
 
-
 common_sidebar()
 
 # Define message placeholder and emoji feedback placeholder
@@ -93,7 +92,7 @@ if user_input:
                 agent_response=None
                 intermediate_steps=None
                 if(st.session_state["USER_SELECTION"]=="DOCUMENTATION"):
-                    agent_response, cb=rag_tool.run(tool_input=user_input)     
+                    agent_response, cb=rag_tool.run(tool_input=user_input)    
                 elif(st.session_state["USER_SELECTION"]=="RELATED_POSTS"):
                     agent_response, cb=object_tool.run(tool_input=user_input)  
                     data = []
@@ -108,15 +107,12 @@ if user_input:
                     df = df.loc[:, (df != 0).any(axis=0)]
                     # Display the DataFrame as a table in Streamlit
                     st.dataframe(df)
-##############################
                 if isinstance(agent_response, dict) is False:
                     logging.warning(
                         f"Agent response was not the expected dict type: {agent_response}"
                     )
                     agent_response = str(agent_response)
                 content = str(agent_response)
- #               content = agent_response["output"]
-#                print(f"content={content}")
                 track(
                     "rag_demo", "ai_response", {"type": "rag_agent", "answer": content}
                 )
