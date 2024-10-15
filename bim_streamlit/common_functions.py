@@ -11,6 +11,7 @@ from langchain.chains import RetrievalQA
 from langchain.chains.conversation.memory import ConversationBufferMemory
 
 meta_str_filter_columns=["arena", "entity_type", "places_names", "post_type","platform_type","hashtags", "publisher_ethnicity", "publisher_gender", "entity_type", "organization_names"]
+list_fields=["arena", "places_names", "hashtags", "organization_names"]
 MEMORY = ConversationBufferMemory(
     memory_key="chat_history", 
     input_key='query', 
@@ -69,12 +70,15 @@ class ChainClass:
             from_existing_index(index_name=self.index_name,embedding=OpenAIEmbeddings(),text_key="text")
         top_k=int(st.session_state["K_TOP"]) if "K_TOP" in st.session_state else 15
         filter={}
-        if "entity_type" in st.session_state and st.session_state['entity_type'] !='All':
-            filter["entity_type"]={'$eq': st.session_state["entity_type"]}
-        if "platform_type" in st.session_state and st.session_state['platform_type'] !='All':
-            filter["platform_type"]={'$eq': st.session_state["platform_type"]}
-        if "post_type" in st.session_state and (st.session_state['post_type']) !='All':
-            filter["post_type"]={'$eq': (st.session_state["post_type"])}
+        for c in meta_str_filter_columns:
+            if c in st.session_state and st.session_state[c] !='All':
+                comparison="$eq"
+                if c in list_fields:
+                    comparison="$in" 
+                    filter[c]={ comparison: [st.session_state[c]]}
+                else:
+                    filter[c]={ comparison: st.session_state[c]}
+
         self.rag_chain = RetrievalQA.from_chain_type(  
             llm=self.rag_llm,  
             chain_type="stuff",  

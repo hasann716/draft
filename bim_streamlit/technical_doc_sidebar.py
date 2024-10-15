@@ -12,7 +12,7 @@ index_name = st.secrets['PINECONE_INDEX']
 index = pc.Index(index_name)
 res = index.query(vector=list(random_vector), top_k=300,include_metadata=True)
 meta_dct_set, list_columns_set=get_meta_data_by_samples(res)
-
+print(list_columns_set)
 def technical_doc_sidebar():
     with st.sidebar: 
     # Streamlit app layout
