@@ -29,9 +29,11 @@ def technical_doc_sidebar():
         st.session_state["MIN_COST"]= st.number_input("cost greater than: ", min_value=0, step=10000)
         # Optionally visualize graph data using third-party libraries
 
-        sample_questions = ["summerize opinions toward arab leaders",
+        sample_questions = ["summerize opinions toward egypt",
                             "what is the sentiment toward hizballah? quote sentences",
-                            "what is the sentiment toward yihya sinwar? quote sentences "] 
+                            "what is the sentiment toward hamas and their leaders? quote sentences ",
+                            "what is the sentiment toward Iran?",
+                            "what is the sentiment toward Hashem Safieddine ?"] 
 
         AddSampleQuestions(sample_questions)
 
