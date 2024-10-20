@@ -24,7 +24,7 @@ def technical_doc_sidebar():
         with st.sidebar:
             st.session_state["K_TOP"]= st.radio(
                 "K top:",
-                ("3","5","10", "20","50", "100", "200", "500"), index=2,horizontal=True
+                ("1", "3","5","10", "20","30", "40","50", "100", "200", "500"), index=2,horizontal=True
             )
         st.session_state["MIN_COST"]= st.number_input("cost greater than: ", min_value=0, step=10000)
         # Optionally visualize graph data using third-party libraries
@@ -33,7 +33,7 @@ def technical_doc_sidebar():
                             "what is the sentiment toward hizballah? quote sentences",
                             "what is the sentiment toward hamas and their leaders? quote sentences ",
                             "what is the sentiment toward Iran?",
-                            "what is the sentiment toward Hashem Safieddine ?"] 
+                            "what do people feel about lebanon government ?"] 
 
         AddSampleQuestions(sample_questions)
 
