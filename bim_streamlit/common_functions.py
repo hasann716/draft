@@ -12,6 +12,7 @@ from langchain.chains.conversation.memory import ConversationBufferMemory
 
 meta_str_filter_columns=["arena", "entity_type", "places_names", "post_type","platform_type","hashtags", "publisher_ethnicity", "publisher_gender", "entity_type", "organization_names"]
 list_fields=["arena", "places_names", "hashtags", "organization_names"]
+date_fields=["publish_time"]
 MEMORY = ConversationBufferMemory(
     memory_key="chat_history", 
     input_key='query', 
@@ -78,7 +79,7 @@ class ChainClass:
                     filter[c]={ comparison: [st.session_state[c]]}
                 else:
                     filter[c]={ comparison: st.session_state[c]}
-
+        filter["publish_time"] = {"$gte": to_epoch(st.session_state["start_datetime"]), "$lte": to_epoch(st.session_state["end_datetime"])   }
         self.rag_chain = RetrievalQA.from_chain_type(  
             llm=self.rag_llm,  
             chain_type="stuff",  
@@ -101,3 +102,8 @@ def get_meta_data_by_samples(res):
                     for j in i['metadata'][k]:
                         meta_dct_set[k].add(j.lower())
     return(meta_dct_set, list_columns_set)
+
+from datetime import datetime
+
+def to_epoch(time_str, tmpl="%Y-%m-%dT%H:%M:%SZ"):
+    return(int(datetime.strptime(time_str,tmpl ).timestamp()))

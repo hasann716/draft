@@ -94,7 +94,7 @@ if user_input:
                     )
                     req_message = {"role": "user", "content": user_input}
                     resp_message = {"role": "ai", "content": content}
-
+                    print(content)
                     with placeholder.container():
                         with st.chat_message(req_message["role"]):
                             st.markdown(req_message["content"], unsafe_allow_html=True)                        

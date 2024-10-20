@@ -22,6 +22,7 @@ networkx = "^3.3"
 pyvis = "^0.3.2"
 tiktoken = "^0.7.0"
 pinecone-client = "5.0.1"
+streamlit-date-picker = "^0.0.3"
 #langchain-pinecone = "^0.1"
 [build-system]
 requires = ["poetry-core"]
